@@ -1,21 +1,33 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
+    <div class="heading grid-container">
+        <h1 class="username">{{username}}</h1>
+        <h6 class="follower">Follower: {{ follower.count }}</h6>
+        <h6 class="following">Following: {{ following.count }}</h6>
+        {% if user.is_authenticated %}
+            {% if user != profile %}
+                {% if isFollowing %}
+                    <div class="un-follow-btn">
+                        <form action="{% url 'unfollow' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="unfollow" value="{{ profile }}"/>
+                            <button type="submit" class="button unfollow-btn">unfollow</button>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="un-follow-btn">
+                        <form action="{% url 'follow' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="follow" value="{{ profile }}"/>
+                            <button type="submit" class="button follow-btn">follow</button>
+                        </form>
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </div>
 
-    <h1 class="heading">All Posts</h1>
-
-    {% if user.is_authenticated %}
-        <div class="Postcard">
-            <h3 class="createPost-heading">New Post</h3>
-            <form action="{% url 'newPost' %}" method="POST">
-                {% csrf_token %}
-                <textarea class="createPost-content" name="content" placeholder="Add your content here!"></textarea>
-                <br/><button class="button createPost-btn" type="submit">Post</button>
-            </form>
-        </div>
-    {% endif %}
-
-    
     {% for post in postsOfPage %}
         <div class="Postcard">
             <h6 id="user"><a href="{% url 'profile' user_id=post.user.id %}">@{{post.user}}</a></h6>
@@ -46,11 +58,11 @@
                     {% if post.likes > 0 %}
                         {% for count in countLikes %}
                             {% if post.id == count.post_id %}
-                                <i class="bi bi-heart liked" onclick="notAllowed()"></i><p class="inline like">{{count.count}}</p>
+                                <i class="bi bi-heart liked" onclick="alert('You cannot like your own post!')"></i><p class="inline like">{{count.count}}</p>
                             {% endif %}
                         {% endfor %}
                     {% else %}
-                        <i class="bi bi-heart like" onclick="notAllowed()"></i><p class="inline like">0</p>
+                        <i class="bi bi-heart like" onclick="alert('You cannot like your own post!')"></i><p class="inline like">0</p>
                     {% endif %}
                 {% else %}
                     {% if post.likes > 0 %}
@@ -59,7 +71,7 @@
                                 {% if post.id in myLikes%}
                                     <i class="bi bi-heart-fill liked" id="like-{{ post.id }}" onclick="likeHandler('{{ post.id }}', '{{ myLikes }}')"></i><p class="inline liked" id="count-{{post.id}}">{{ count.count }}</p>
                                 {% else %}
-                                    <i class="bi bi-heart liked" id="like-{{ post.id }}" onclick="likeHandler('{{ post.id }}', '{{ myLikes }}')"></i><p class="inline like" id="count-{{post.id}}">{{ count.count }}</p>
+                                    <i class="bi bi-heart liked" id="like-{{ post.id }}" onclick="likeHandler('{{ post.id }}', '{{ myLikes }}')"></i><p class="inline like" id="count-{{post.id}}">{{count.count}}</p>
                                 {% endif %}
                             {% endif %}
                         {% endfor %}
@@ -77,7 +89,7 @@
                 {% else %}
                     <i class="bi bi-heart like" onclick="notAutheticated()"></i><p class="inline like">0</p>
                 {% endif %}
-            {% endif %} 
+            {% endif %}
         </div>
     {% endfor %}
 

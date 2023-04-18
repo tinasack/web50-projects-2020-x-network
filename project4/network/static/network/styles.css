@@ -1,0 +1,109 @@
+body {
+    height: 100%;
+}
+
+.heading {
+    border-bottom: 1px solid darkgray;
+    margin: 1vw;
+}
+
+.grid-container {
+    display: grid;
+    height: auto;
+    grid: "username follower following button" min-content /
+          auto auto 1fr auto;
+    margin-bottom: 1vw;
+    gap: 1vw;
+}
+
+.username{
+    grid-area: username;
+}
+
+.follower {
+    grid-area: follower;
+}
+.following {
+    grid-area: following;
+}
+.un-follow-btn {
+    grid-area: button;
+    align-self: center;
+}
+
+textarea {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    width: 100%;
+}
+
+.Postcard{
+    margin: 2vw;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    padding: 1vw;
+}
+
+.createPost-content {
+    padding: 1vw;
+    height: 10vw;
+}
+
+.button {
+    border-radius: 10px;
+    border: 1px solid white;
+}
+
+.createPost-btn {
+    color: white;
+    background-color: #3a82ff;
+}
+
+.follow-btn {
+    color: white;
+    background-color: gray;
+    font-size: large;
+}
+
+.unfollow-btn {
+    color: rgb(255, 120, 120);
+    background-color: gray;
+    border: 1px solid rgb(255, 120, 120);
+    justify-self: end;
+}
+
+.edit-btn {
+    color:#3a82ff;
+    margin-left: -0.5vw;
+}
+
+#date {
+    color: gray;
+}
+
+.paginator {
+    padding: 2vw;
+}
+
+.inactive {
+    color: lightgray;
+}
+
+.disabled:hover {
+    background-color: white;
+}
+
+.inline {
+    display: inline;
+    margin-left: 0.5vw;
+}
+
+.like {
+    color: gray;
+}
+
+.liked {
+    color: red;
+}
