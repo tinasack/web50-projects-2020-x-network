@@ -121,8 +121,21 @@ def following(request):
     pageNumber = request.GET.get('page')
     postsOfPage = paginate.get_page(pageNumber)
 
+    allLikes = Like.objects.all()
+    myLikedPosts = []
+    try:
+        for like in allLikes:
+            if like.user.id == request.user.id:
+                myLikedPosts.append(like.post.id)
+    except:
+        myLikedPosts = []
+
+    countLikes = Like.objects.values('post_id').order_by('post_id').annotate(count=Count('post_id'))
+
     return render(request, "network/following.html", {
-        "postsOfPage": postsOfPage
+        "postsOfPage": postsOfPage,
+        "myLikes": myLikedPosts,
+        "countLikes": countLikes
     })
 
 def edit(request, post_id):

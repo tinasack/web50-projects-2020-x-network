@@ -8,8 +8,21 @@
             <h6 id="user"><a href="{% url 'profile' user_id=post.user.id %}">@{{post.user}}</a></h6>
             <h5 id="content">{{post.content}}</h5>
             <p id="date"><small>{{post.date}}</small></p>
-            <p>placeholder "like"</p>
-            <p>placeholder "comments"</p>
+            {% if user.is_authenticated %}
+                {% if post.likes > 0 %}
+                    {% for count in countLikes %}
+                        {% if post.id == count.post_id %}
+                            {% if post.id in myLikes%}
+                                <i class="bi bi-heart-fill liked" id="like-{{ post.id }}" onclick="likeHandler('{{ post.id }}', '{{ myLikes }}')"></i><p class="inline liked" id="count-{{post.id}}">{{ count.count }}</p>
+                            {% else %}
+                                <i class="bi bi-heart liked" id="like-{{ post.id }}" onclick="likeHandler('{{ post.id }}', '{{ myLikes }}')"></i><p class="inline like" id="count-{{post.id}}">{{ count.count }}</p>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <i class="bi bi-heart like" id="like-{{ post.id }}" onclick="likeHandler('{{ post.id }}', '{{ myLikes }}')"></i><p class="inline like" id="count-{{post.id}}">0</p>
+                {% endif %}
+            {% endif %}
         </div>
     {% endfor %}
 

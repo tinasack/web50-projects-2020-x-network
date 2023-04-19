@@ -68,8 +68,8 @@ textarea {
 }
 
 .unfollow-btn {
-    color: rgb(255, 120, 120);
-    background-color: gray;
+    color: rgb(255, 0, 0);
+    background-color: lightgray;
     border: 1px solid rgb(255, 120, 120);
     justify-self: end;
 }
@@ -106,4 +106,12 @@ textarea {
 
 .liked {
     color: red;
+}
+
+.readonly {
+    border: none;
+}
+
+.editable:focus {
+    background-color: lightblue;
 }

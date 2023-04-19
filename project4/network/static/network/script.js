@@ -66,28 +66,49 @@ function getCookie(name){
     if(parts.length == 2) return parts.pop().split(';').shift();
 };
 
-function editHandler(id){
-    const textarea = document.getElementById(`textarea-${id}`).value;
+function saveEdit(id, newContent){
+    const button = document.getElementById(`edit-save-${id}`);
+    const input = newContent;
     const content = document.getElementById(`content-${id}`);
-    const modal = document.getElementById(`modal-edit-${id}`);
+    content.classList.remove('editable');
     fetch(`/edit/${id}`, {
         method: "POST",
         headers: {"Content-type": "application/json","X-CSRFToken": getCookie("csrftoken")},
         body: JSON.stringify({
-            content: textarea
+            content: input
         })
     })
     .then(response => response.json())
     .then(result => {
+        console.log(result.message);
         content.innerHTML = result.data;
-        modal.classList.remove('show');
-        modal.setAttribute('aria-hidden', 'true');
-        modal.setAttribute('style', 'display: none');
-
-        const modalBackdrop = document.getElementsByClassName('modal-backdrop');
-
-        for(let i=0; i<modalBackdrop.length; i++){
-            document.body.removeChild(modalBackdrop[i]);
-        }
+        content.classList.add('readonly');
+        button.innerHTML = `<button class="button edit-btn" type="button"  onclick="makeEdit('{{post.id}}')">Edit</button>`;
     });
 };
+
+function makeEdit(id){
+    const content = document.getElementById(`content-${id}`);
+    content.classList.remove('readonly');
+    content.classList.add('editable');
+    content.readOnly = false;
+    //set inputfield on focus and cursor position to the end of line
+    var len = content.value.length;
+    if (content.setSelectionRange) {
+        content.focus();
+        content.setSelectionRange(len, len);
+    } else if (content.createTextRange) {
+        var range = content.createTextRange();
+        range.collapse(true);
+        range.moveEnd('character', len);
+        range.moveStart('character', len);
+        range.select();
+    }
+};
+
+function edit(id){
+    var newContent = document.getElementById(`content-${id}`).value;
+    console.log(newContent);
+    const button = document.getElementById(`edit-save-${id}`);
+    button.innerHTML = `<button class="button edit-btn" type="button" onclick="saveEdit('${id}', '${newContent}')">save</button>`;
+}
